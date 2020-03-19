@@ -1,5 +1,5 @@
 from scrapy.crawler import CrawlerProcess
-from src.scraper.scraper.spiders.rki_spider import RKISpider
+from scraper.scraper.spiders.rki_spider import RKISpider
 
 process = CrawlerProcess()
 process.crawl(RKISpider)

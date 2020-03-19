@@ -2,7 +2,7 @@ import scrapy
 from datetime import date
 import json
 import os
-from src.util.utils import grouper, get_project_root
+from util.utils import grouper, get_project_root
 
 
 class RKISpider(scrapy.Spider):
