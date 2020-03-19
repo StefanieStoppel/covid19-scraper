@@ -24,7 +24,7 @@ jobs:
 
    # Install dependencies with pip
     - name: Show python version
-      run: python --version
+      run: python3 --version
 
     # Install dependencies with pip
     - name: Run spider
