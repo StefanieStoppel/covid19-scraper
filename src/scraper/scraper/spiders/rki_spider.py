@@ -1,9 +1,8 @@
 import scrapy
 from datetime import date
 import json
-# from src.utils import grouper, get_project_root
-from util.helpers import grouper
 import os
+from src.util.utils import grouper, get_project_root
 
 
 class RKISpider(scrapy.Spider):
@@ -11,8 +10,7 @@ class RKISpider(scrapy.Spider):
     start_urls = [
         'https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Fallzahlen.html',
     ]
-    # root_dir = get_project_root()
-    data_dir = '../../data'
+    data_dir = os.path.join(str(get_project_root()), 'data')
 
     def parse(self, response):
         filename = os.path.join(self.data_dir, 'rki-%s.json' % date.today())
