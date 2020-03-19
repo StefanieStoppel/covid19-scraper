@@ -22,6 +22,10 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
+   # Install dependencies with pip
+    - name: Show python version
+      run: python --version
+
     # Install dependencies with pip
     - name: Run spider
       run: pip install -r requirements.txt
