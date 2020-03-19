@@ -22,13 +22,19 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
-    # Install dependencies with pip
-    - name: Run spider
-      run: pip3 install -r requirements.txt
+    # Build and push docker image
+    - name: Publish Docker
+      uses: elgohr/Publish-Docker-Github-Action@2.13
+      with:
+        name: StefanieStoppel/covid19-scraper/covid19-scraper
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        registry: docker.pkg.github.com
+        tags: "latest"
 
-    # Run spider to crawl rki
-    - name: Run spider
-      run: python ./src/run_spider.py
+#    # Run spider to crawl rki
+#    - name: Run spider
+#      run: python ./src/run_spider.py
 
 #    # Runs a set of commands using the runners shell
 #    - name: Run a multi-line script
