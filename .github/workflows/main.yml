@@ -22,7 +22,11 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
-    # Runs a single command using the runners shell
+    # Install dependencies with pip
+    - name: Run spider
+      run: pip install -r requirements.txt
+
+    # Run spider to crawl rki
     - name: Run spider
       run: python ./src/run_spider.py
 
