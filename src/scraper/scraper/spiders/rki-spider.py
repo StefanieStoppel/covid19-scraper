@@ -1,16 +1,21 @@
 import scrapy
 from datetime import date
 import json
+# from src.utils import grouper, get_project_root
 from util.helpers import grouper
+import os
+
 
 class RKISpider(scrapy.Spider):
     name = "rki"
     start_urls = [
         'https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Fallzahlen.html',
     ]
+    # root_dir = get_project_root()
+    data_dir = '../../data'
 
     def parse(self, response):
-        filename = 'rki-%s.json' % date.today()
+        filename = os.path.join(self.data_dir, 'rki-%s.json' % date.today())
         data = self.create_pandas_dict(response)
         self.create_json(data, filename)
 
@@ -33,16 +38,17 @@ class RKISpider(scrapy.Spider):
 
     def parse_table_header(self, response):
         table_header = [r.replace('\xad', '') for r in response.xpath('//table/thead/tr/th/text()').getall()]
-        table_header.pop(1) # pop unneeded header 'Elektronisch übermittelte Fälle'
-        table_header.append(table_header.pop(1)) # move header to end of list
+        table_header.pop(1)  # pop unneeded header 'Elektronisch übermittelte Fälle'
+        table_header.append(table_header.pop(1))  # move header to end of list
         return table_header
 
     def parse_table_body(self, response):
         entries_per_row = 6
 
         counties = [td.xpath('text()').get(default='') for td in response.xpath('//table/tbody/tr/td')]
-        table_content = {county_data[0]:county_data[1:] for county_data in grouper(counties, entries_per_row, '')[:-1]}
+        table_content = {county_data[0]: county_data[1:] for county_data in grouper(counties, entries_per_row, '')[:-1]}
 
-        totals = [td.xpath('strong/text()').get(default='') for td in response.xpath('//table/tbody/tr/td')][-entries_per_row:]
+        totals = [td.xpath('strong/text()').get(default='') for td in response.xpath('//table/tbody/tr/td')][
+                 -entries_per_row:]
         table_content[totals[0]] = totals[1:]
         return table_content
